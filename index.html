@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title>Contoh Pemakaian API Rajaongkir dengan AJAX</title>
+    <style>
+      body {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid black;
+        width: 100%;
+      }
+      label, input {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <label>Masukkan URL API</label>
+    <input type="text" name="url" />
+    <button type="button" name="btn">Cek</button>
+    
+    <pre name="response" style="border: 1px solid blue; background-color: gray;color: white;height: 300px;overflow-y: scroll;"><code>Respon dari API akan tampil disini!</code></pre>
+    Contoh API Raja ONGKIR (kota = city, province = provinsi):
+    <ol>
+      <li>
+        ongkir.php?origin=501&destination=114&weight=1700&courier=jne 
+        <br>
+        Parameter :
+        <br>
+        origin = id_city asal, destination = id_city tujuan, weight = berat barang dalam gr, courier = kode kurir (jne, tiki, pos) 
+      </li>
+      <li>
+        kota.php
+        <br>
+        Parameter :
+        id = id_city, province = id_provience (menampilkan kota dalam sebuah provinsi)
+        <br>
+        origin = id_city asal, destination = id_city tujuan, weight = berat barang dalam gr, courier = kode kurir (jne, tiki, pos) 
+      </li>
+      <li>
+        provinsi.php
+        <br>
+        Parameter :
+        id = id_provience 
+        <br>
+        origin = id_city asal, destination = id_city tujuan, weight = berat barang dalam gr, courier = kode kurir (jne, tiki, pos) 
+      </li>
+    </ol>
+    
+    <script src="axios.min.js"></script>
+    
+    <script>
+      // Buat instansi axios menggunakan axios cache adapter
+      var rajaongkir = axios.create()
+      
+      function getApi(url){
+        rajaongkir.get(url)
+          .then(function(response){
+            document.getElementsByName("response")[0].innerHTML = JSON.stringify(response.data, null, 2);
+          }) 
+          .catch(function(error){
+            document.getElementsByName("response")[0].innerHTML = JSON.stringify(error, null, 2);
+          })
+      }
+      
+      document.getElementsByName("btn")[0].addEventListener("click", function(){
+        var url = document.getElementsByName("url")[0].value;
+        if(url.length == 0){
+          alert("Silahkan masukkan URL terlebih dahulu!");
+        }else{
+          getApi(url);
+        }
+      });
+    </script>
+  </body>
+</html>
